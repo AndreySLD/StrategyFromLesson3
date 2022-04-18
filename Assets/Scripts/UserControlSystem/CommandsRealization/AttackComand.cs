@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace UserControlSystem.CommandsRealization
 {
-    public class AttackComand : IAttackCommand
+    public class AttackComand : IAttackCommand  
     {
-        public GameObject Target { get; }
+        public IAttackable Target { get; }
 
-        public AttackComand(GameObject target)
+        public AttackComand(IAttackable target)
         {
             Target = target;
         }
