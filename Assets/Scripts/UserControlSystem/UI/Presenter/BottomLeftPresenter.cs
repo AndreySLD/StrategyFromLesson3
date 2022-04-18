@@ -30,11 +30,11 @@ namespace UserControlSystem
             if (selected != null)
             {
                 _selectedImage.sprite = selected.Icon;
-                _text.text = $"{selected.CurrentHealth}/{selected.MaxHealth}";
+                _text.text = $"{selected.Health}/{selected.MaxHealth}";
                 _healthSlider.minValue = 0;
                 _healthSlider.maxValue = selected.MaxHealth;
-                _healthSlider.value = selected.CurrentHealth;
-                var color = Color.Lerp(Color.red, Color.green, selected.CurrentHealth / (float)selected.MaxHealth);
+                _healthSlider.value = selected.Health;
+                var color = Color.Lerp(Color.red, Color.green, selected.Health / (float)selected.MaxHealth);
                 _sliderBackground.color = color * 0.5f;
                 _sliderFillImage.color = color;
             }
