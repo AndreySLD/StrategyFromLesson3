@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Abstractions;
+using UniRx;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UserControlSystem;
@@ -16,23 +17,20 @@ public sealed class MouseInteractionPresenter : MonoBehaviour
     
     private Plane _groundPlane;
     
-    private void Start() => _groundPlane = new Plane(_groundTransform.up, 0);
+    private void Awake() => _groundPlane = new Plane(_groundTransform.up, 0);
 
-    private void Update()
+    private void Start()
     {
-        if (!Input.GetMouseButtonUp(0) && !Input.GetMouseButton(1))
-        {
-            return;
-        }
-        
-        if (_eventSystem.IsPointerOverGameObject())
-        {
-            return;
-        }
-        
-        var ray = _camera.ScreenPointToRay(Input.mousePosition);
-        var hits = Physics.RaycastAll(ray);
-        if (Input.GetMouseButtonUp(0))
+        var LMBClick = Observable.EveryUpdate().Where(_ => Input.GetMouseButton(0) && !_eventSystem.IsPointerOverGameObject());
+        var RMBClick = Observable.EveryUpdate().Where(_ => Input.GetMouseButton(1) && !_eventSystem.IsPointerOverGameObject());
+
+        var LMBray = LMBClick.Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
+        var RMBray = RMBClick.Select(_ => _camera.ScreenPointToRay(Input.mousePosition));
+
+        var LMBHits = LMBray.Select(ray => Physics.RaycastAll(ray));
+        var RMBHits = RMBray.Select(ray => (ray, Physics.RaycastAll(ray)));
+
+        LMBHits.Subscribe(hits =>
         {
             if (WeHit<ISelectable>(hits, out var selectable))
             {
@@ -42,18 +40,20 @@ public sealed class MouseInteractionPresenter : MonoBehaviour
             {
                 _selectedObject.SetValue(null);
             }
-        }
-        else
+        });
+
+        RMBHits.Subscribe(data =>
         {
-            if (WeHit<IAttackable>(hits, out var attackable))
+
+            if (WeHit<IAttackable>(data.Item2, out var attackable))
             {
                 _attackablesRMB.SetValue(attackable);
             }
-            else if (_groundPlane.Raycast(ray, out var enter))
+            else if (_groundPlane.Raycast(data.Item1, out var enter))
             {
-                _groundClicksRMB.SetValue(ray.origin + ray.direction * enter);
+                _groundClicksRMB.SetValue((data.Item1.origin + (data.Item1.direction * enter)));
             }
-        }
+        });
     }
 
     private bool WeHit<T>(RaycastHit[] hits, out T result) where T : class
