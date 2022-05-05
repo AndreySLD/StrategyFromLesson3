@@ -1,4 +1,5 @@
-﻿using Abstractions.Commands.CommandsInterfaces;
+﻿using Abstractions;
+using Abstractions.Commands.CommandsInterfaces;
 using UnityEngine;
 using UserControlSystem.UI.Model;
 using Zenject;
@@ -26,7 +27,7 @@ namespace UserControlSystem
 
             Container.Bind<CommandButtonsModel>().AsTransient();
             
-            Container.Bind<float>().WithId("Chomper").FromInstance(5f);
+            Container.Bind<float>().WithId("Chomper").FromInstance(5f); //ProductionTime
             Container.Bind<string>().WithId("Chomper").FromInstance("Chomper");
             Container.Bind<Sprite>().WithId("Chomper").FromInstance(_chomperSprite);
 
