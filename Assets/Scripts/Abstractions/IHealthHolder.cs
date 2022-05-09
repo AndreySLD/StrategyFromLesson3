@@ -4,6 +4,5 @@
     {
         float Health { get; }
         float MaxHealth { get; }
-        int HealthBarHeightPosition { get; }
     }
 }

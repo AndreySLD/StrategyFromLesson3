@@ -22,7 +22,7 @@ public class GameStatus : MonoBehaviour, IGameStatus
         }
         else if (FactionMember.FactionsCount == 1)
         {
-            _status.OnNext(FactionMember.GetWinnerNumber());
+            _status.OnNext(FactionMember.GetWinner());
         }
     }
 
