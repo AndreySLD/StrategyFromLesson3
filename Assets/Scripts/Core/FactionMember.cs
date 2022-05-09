@@ -30,12 +30,12 @@ namespace Assets.Scripts.Core
             }
         }
 
-        public static int GetWinnerNumber()
+        public static int GetWinner()
         {
             lock (_membersCount)
             {
                 return _membersCount.Keys.First();
-            }           
+            }
         }
                 
         public void SetFaction(int factionId)

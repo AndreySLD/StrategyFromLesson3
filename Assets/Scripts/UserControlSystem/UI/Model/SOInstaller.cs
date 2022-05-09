@@ -6,8 +6,8 @@ using Zenject;
 
 namespace UserControlSystem
 {
-    [CreateAssetMenu(fileName = nameof(ScrObjInstaller), menuName = "Strategy Game/" + nameof(ScrObjInstaller))]
-    public class ScrObjInstaller : ScriptableObjectInstaller
+    [CreateAssetMenu(fileName = nameof(SOInstaller), menuName = "Strategy Game/" + nameof(SOInstaller))]
+    public class SOInstaller : ScriptableObjectInstaller
     {
         [SerializeField] private AssetsContext _assetsContext;
         [SerializeField] private SelectableValue _selectableValue;

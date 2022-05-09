@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace Core.CommandExecutors
 {
-    public class ProduceUnitCommandExecutor : CommandExecutorBase<IProduceUnitCommand>, IUnitProducer
+    public class ProduceGrenadierCommandExecutor : CommandExecutorBase<IProduceGrenadierCommand>, IUnitProducer
     {
         public IReadOnlyReactiveCollection<IUnitProductionTask> Queue => _queue;
 
@@ -32,8 +32,7 @@ namespace Core.CommandExecutors
             innerTask.TimeLeft -= Time.deltaTime;
             if (innerTask.TimeLeft <= 0)
             {
-                RemoveTaskAtIndex(0);
-                //var unit = Instantiate(innerTask.UnitPrefab, transform.position, Quaternion.identity, _unitsParent);
+                RemoveTaskAtIndex(0);                
                 var unit = _diContainer.InstantiatePrefab(innerTask.UnitPrefab, transform.position, Quaternion.identity, _unitsParent);
                 if (_point != Vector3.zero)
                     _ = unit.GetComponent<MoveCommandExecutor>().ExecuteSpecificCommand(new MoveCommand(_point));
@@ -56,15 +55,9 @@ namespace Core.CommandExecutors
             _point = point;
         }
 
-        public override async Task ExecuteSpecificCommand(IProduceUnitCommand command)
-        {
-            //var instance = _diContainer.InstantiatePrefab(command.UnitPrefab, transform.position, Quaternion.identity, _unitsParent);
-            //var queue = instance.GetComponent<ICommandsQueue>();
+        public override async Task ExecuteSpecificCommand(IProduceGrenadierCommand command)
+        {            
             _queue.Add(new UnitProductionTask(command.ProductionTime, command.Icon, command.UnitPrefab, command.UnitName));
-            //var mainBuilding = GetComponent<MainBuilding>();
-            //var factionMember = instance.GetComponent<FactionMember>();
-            //factionMember.SetFaction(GetComponent<FactionMember>().FactionId);
-            //queue.EnqueueCommand(new MoveCommand(_point));
             await Task.CompletedTask;
         }
     }

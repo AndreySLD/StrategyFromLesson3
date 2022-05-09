@@ -12,8 +12,8 @@ namespace Core.CommandExecutors
         public override async Task ExecuteSpecificCommand(ISetDepotPointCommand command)
         {
             var produceCommandExecutor = GetComponent<IUnitProducer>();
-            produceCommandExecutor.SetStackPoint(command.Point);
-            Debug.Log($"{command.Point} is set as stack position for units!");
+            produceCommandExecutor.SetDepotPoint(command.Point);
+            Debug.Log($"{command.Point} is set as position for units!");
             await Task.CompletedTask;
         }
     }
